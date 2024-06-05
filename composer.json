@@ -1,5 +1,5 @@
 {
-    "name": "laravel/laravel",
+    "name": "isap-ou/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
@@ -7,15 +7,37 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^11.0",
-        "laravel/tinker": "^2.9"
+        "alexwenzel/nova-dependency-container": "^1",
+        "badinansoft/nova-language-switch": "^1.2",
+        "codezero/laravel-unique-translation": "^4.3",
+        "devloops/phone-number": "^1.0",
+        "ebess/advanced-nova-media-library": "^4.2",
+        "laravel/horizon": "^5",
+        "laravel/nova": "^4",
+        "laravel/nova-log-viewer": "^0.1.4",
+        "laravel/tinker": "^2.9",
+        "mcamara/laravel-localization": "^2.0",
+        "murdercode/nova4-seo-description": "^0.0.1",
+        "murdercode/seo-title": "^0.0.3",
+        "outl1ne/nova-settings": "^5.2",
+        "outl1ne/nova-translatable": "^2.2",
+        "sentry/sentry-laravel": "^4.4",
+        "sereny/nova-permissions": "^1.6",
+        "spatie/laravel-sluggable": "^3.6",
+        "tightenco/nova-google-analytics": "dev-main",
+        "whitecube/nova-flexible-content": "dev-master"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest",
+        "barryvdh/laravel-debugbar": "^3",
+        "barryvdh/laravel-ide-helper": "^3.0",
         "fakerphp/faker": "^1.23",
+        "laravel-lang/common": "^6.2",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
-        "phpunit/phpunit": "^11.0.1",
+        "phpunit/phpunit": "^10.5",
         "spatie/laravel-ignition": "^2.4"
     },
     "autoload": {
@@ -36,15 +58,16 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta",
+            "@php artisan nova:publish"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
+            "@php artisan key:generate --ansi"
         ]
     },
     "extra": {
@@ -61,6 +84,16 @@
             "php-http/discovery": true
         }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:isap-ou/nova-flexible-content.git"
+        }
+    ],
     "minimum-stability": "stable",
     "prefer-stable": true
 }

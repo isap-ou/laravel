@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo 'Running Laravel Pint';
+git status --porcelain | grep -e '^[AM]\(.*\).php$' | cut -c 3- | while read line; do
+  IS_BLADE=$(echo "$line" | grep -q -E '.blade.' && echo "yes" || echo "no");
+  sed -i '' '/xdebug_break/d' "$line";
+  if [ "$IS_BLADE" = "no" ]; then
+     if [ -z `docker-compose ps -q laravel.test` ] || [ -z `docker ps -q --no-trunc | grep $(docker-compose ps -q laravel.test)` ]; then
+        vendor/bin/pint "$line";
+     else
+        docker-compose exec -it laravel.test vendor/bin/pint "$line";
+    fi;
+  fi
+  git add "$line";
+done
+
+exit 0;
