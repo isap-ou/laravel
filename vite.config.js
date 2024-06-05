@@ -4,9 +4,18 @@ import viteFaviconPlugin from "./cli/vite/favicons.js";
 import webfontDownload from 'vite-plugin-webfont-dl';
 import lightningcss from "vite-plugin-lightningcss";
 import viteCompression from 'vite-plugin-compression';
+import viteI18NPlugin from "./cli/vite/i18n.js";
+import vue from '@vitejs/plugin-vue';
+import path from "path";
 
 export default defineConfig({
+    resolve: {
+        alias: {
+            '@': path.resolve('resources/js'),
+        },
+    },
     plugins: [
+        viteI18NPlugin(),
         viteFaviconPlugin(),
         viteCompression({
             algorithm: "gzip"
@@ -20,6 +29,14 @@ export default defineConfig({
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
+        }),
+        vue({
+            template: {
+                transformAssetUrls: {
+                    base: null,
+                    includeAbsolute: false,
+                },
+            },
         }),
     ],
 });
