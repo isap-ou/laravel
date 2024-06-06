@@ -1,4 +1,4 @@
-import {favicons, config} from "favicons";
+import {favicons} from "favicons";
 import path from "path";
 import fs from "fs/promises";
 
@@ -26,24 +26,29 @@ const options = {
 }
 
 const buildStart = (buildOptions, test) => new Promise(resolve => {
-    favicons(source, options).then(async response => {
+    try {
+        const stats = fs.statSync(source)
+        favicons(source, options).then(async response => {
 
-        await fs.mkdir(dest, {recursive: true});
-        await Promise.all(
-            response.images.map(
-                async (image) =>
-                    await fs.writeFile(path.join(dest, image.name), image.contents),
-            ),
-        );
-        await Promise.all(
-            response.files.map(
-                async (file) =>
-                    await fs.writeFile(path.join(dest, file.name), file.contents),
-            ),
-        );
-        await fs.writeFile(htmlBasename, response.html.join("\n"));
-        resolve(response)
-    })
+            await fs.mkdir(dest, {recursive: true});
+            await Promise.all(
+                response.images.map(
+                    async (image) =>
+                        await fs.writeFile(path.join(dest, image.name), image.contents),
+                ),
+            );
+            await Promise.all(
+                response.files.map(
+                    async (file) =>
+                        await fs.writeFile(path.join(dest, file.name), file.contents),
+                ),
+            );
+            await fs.writeFile(htmlBasename, response.html.join("\n"));
+            resolve(response)
+        })
+    } catch (e) {
+        resolve();
+    }
 })
 
 export default () => ({

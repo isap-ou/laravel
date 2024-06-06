@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PageTypeEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,6 +11,9 @@ return new class extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
+
+            //Page type:
+            $table->enum('page_type', collect(PageTypeEnum::cases())->pluck('value')->toArray());
 
             $table->json('title')->nullable(); //Default only works on JSON on MySQL 8 or newer
 
@@ -41,8 +45,8 @@ return new class extends Migration
             //Slug:
             $table->json('slug')->nullable();
 
-            //Unique code:
-            $table->string('code')->nullable()->unique();
+            //JSON-LD:
+            $table->json('json_ld')->nullable();
 
             //Author:
             $table->unsignedBigInteger('author_id')->nullable();
@@ -51,5 +55,13 @@ return new class extends Migration
 
             $table->timestamps();
         });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('posts');
     }
 };

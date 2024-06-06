@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PostResource\Pages;
+use App\Forms\Components\JsonLdField;
+use App\Forms\Components\PageTypeField;
 use App\Models\Post;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
@@ -12,7 +14,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Statikbe\FilamentFlexibleContentBlocks\Filament\Form\Fields\AuthorField;
-use Statikbe\FilamentFlexibleContentBlocks\Filament\Form\Fields\CodeField;
 use Statikbe\FilamentFlexibleContentBlocks\Filament\Form\Fields\ContentBlocksField;
 use Statikbe\FilamentFlexibleContentBlocks\Filament\Form\Fields\Groups\HeroImageSection;
 use Statikbe\FilamentFlexibleContentBlocks\Filament\Form\Fields\Groups\OverviewFields;
@@ -47,8 +48,8 @@ class PostResource extends Resource
                     ->tabs([
                         Tab::make('General')
                             ->schema([
+                                PageTypeField::create(),
                                 TitleField::create(),
-                                CodeField::create(),
                                 SlugField::create(false),
                                 IntroField::create(),
                                 AuthorField::create(),
@@ -66,6 +67,7 @@ class PostResource extends Resource
                         Tab::make('SEO')
                             ->schema([
                                 SEOFields::create(1, true),
+                                JsonLdField::create(),
                             ]),
                     ]),
 

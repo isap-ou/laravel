@@ -11,6 +11,7 @@ use Statikbe\FilamentFlexibleContentBlocks\Filament\Resource\Pages\Actions\CopyC
 class EditPost extends EditRecord
 {
     use TranslatableWithMedia;
+
     protected static string $resource = PostResource::class;
 
     protected function getHeaderActions(): array

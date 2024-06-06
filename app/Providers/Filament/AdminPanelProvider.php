@@ -19,9 +19,11 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
+use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 use ShuvroRoy\FilamentSpatieLaravelHealth\FilamentSpatieLaravelHealthPlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -69,8 +71,9 @@ class AdminPanelProvider extends PanelProvider
 
                 ),
                 \TomatoPHP\FilamentUsers\FilamentUsersPlugin::make(),
-                FilamentProgressbarPlugin::make()->color('#29b')
-//                FilamentSpatieLaravelBackupPlugin::make(),
+                FilamentProgressbarPlugin::make()->color('#29b'),
+                FilamentEditProfilePlugin::make(),
+                //                FilamentSpatieLaravelBackupPlugin::make(),
             ]);
     }
 }
