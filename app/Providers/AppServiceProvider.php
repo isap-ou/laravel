@@ -9,6 +9,7 @@ use Spatie\Health\Checks\Checks\DebugModeCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
 use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 use Spatie\Health\Facades\Health;
+use Statikbe\FilamentTranslationManager\FilamentTranslationManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
             $switch
                 ->locales(LaravelLocalization::getSupportedLanguagesKeys()); // also accepts a closure
         });
+
+        FilamentTranslationManager::setLocales(LaravelLocalization::getSupportedLanguagesKeys());
 
         Health::checks([
             OptimizedAppCheck::new(),

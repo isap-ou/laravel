@@ -65,14 +65,25 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentSpatieRolesPermissionsPlugin::make(),
                 FilamentSpatieLaravelHealthPlugin::make(),
-                FilamentGeneralSettingsPlugin::make(),
+                FilamentGeneralSettingsPlugin::make()
+                    ->setSort(3)
+                    ->setIcon('heroicon-o-cog')
+                    ->setNavigationGroup('Settings')
+                    ->setTitle('General Settings')
+                    ->setNavigationLabel('General Settings'),
                 SpatieLaravelTranslatablePlugin::make()->defaultLocales(
                     LaravelLocalization::getSupportedLanguagesKeys(),
 
                 ),
                 \TomatoPHP\FilamentUsers\FilamentUsersPlugin::make(),
                 FilamentProgressbarPlugin::make()->color('#29b'),
-                FilamentEditProfilePlugin::make(),
+                FilamentEditProfilePlugin::make()
+                    ->setNavigationGroup('Settings')
+                    ->setSort(1)
+                    ->shouldShowBrowserSessionsForm()
+                    ->setIcon('heroicon-o-identification'),
+                \Statikbe\FilamentTranslationManager\FilamentChainedTranslationManagerPlugin::make(),
+
                 //                FilamentSpatieLaravelBackupPlugin::make(),
             ]);
     }

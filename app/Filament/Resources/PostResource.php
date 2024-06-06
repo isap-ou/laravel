@@ -36,7 +36,7 @@ class PostResource extends Resource
 
     protected static ?string $recordRouteKeyName = 'id';
 
-    protected static ?string $navigationIcon = 'heroicon-o-globe-europe-africa';
+    protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
     public static function form(Form $form): Form
     {
