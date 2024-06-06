@@ -29,6 +29,7 @@
     "shuvroroy/filament-spatie-laravel-backup": "^2.1",
     "shuvroroy/filament-spatie-laravel-health": "^2.0",
     "spatie/laravel-permission": "^6",
+    "statikbe/laravel-cookie-consent": "^1",
     "statikbe/laravel-filament-chained-translation-manager": "^3.2",
     "statikbe/laravel-filament-flexible-content-blocks": "^2.0",
     "tomatophp/filament-users": "^1.0",

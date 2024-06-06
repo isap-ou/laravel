@@ -19,6 +19,6 @@
 </head>
 <body class="font-sans antialiased">
 @yield('content')
-@vite'(['resources/js/app.js'])
+@vite(['resources/js/app.js'])
 </body>
 </html>
