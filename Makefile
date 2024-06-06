@@ -1,6 +1,8 @@
 TARGET := .env
 SOURCE := .env.example
 
+TEMP_FILE := my_var_state
+
 include .env.example
 export
 
@@ -13,15 +15,24 @@ init: copy-env
 	$(MAKE) build
 	$(MAKE) start
 	$(MAKE) composer install
+	$(MAKE) key_generate
 	$(MAKE) yarn install
 	$(MAKE) migrate
+	$(MAKE) artisan permissions:sync
 
 copy-env:
 	@if [ ! -f $(TARGET) ]; then \
 		cp $(SOURCE) $(TARGET); \
+		echo "true" > $(TEMP_FILE); \
 		echo "$(TARGET) was copied."; \
 	else \
 		echo "$(TARGET) already exists."; \
+	fi
+
+key_generate:
+	@if [ -f $(TEMP_FILE) ] && [ "$$(cat $(TEMP_FILE))" = "true" ]; then \
+		$(MAKE) artisan key:generate; \
+		docker-compose exec laravel.test rm -f $(TEMP_FILE); \
 	fi
 
 build:
