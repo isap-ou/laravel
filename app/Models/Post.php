@@ -2,72 +2,58 @@
 
 namespace App\Models;
 
-use App\Enums\MediaCollectionEnum;
-use App\Enums\PageTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use LaravelLocalization;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Spatie\MediaLibrary\HasMedia;
-use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Spatie\Sluggable\HasTranslatableSlug;
-use Spatie\Sluggable\SlugOptions;
-use Spatie\Translatable\HasTranslations;
-use Whitecube\NovaFlexibleContent\Concerns\HasFlexible;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasAuthorAttributeTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasCodeTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasDefaultContentBlocksTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasTranslatedContentBlocksTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasTranslatedHeroImageAttributesTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasTranslatedIntroAttributeTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasTranslatedOverviewAttributesTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasTranslatedPageAttributesTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasTranslatedSEOAttributesTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Concerns\HasTranslatedSlugAttributeTrait;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasCode;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasContentBlocks;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasHeroImageAttributes;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasIntroAttribute;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasMediaAttributes;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasOverviewAttributes;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasPageAttributes;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasSEOAttributes;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\HasTranslatableMedia;
+use Statikbe\FilamentFlexibleContentBlocks\Models\Contracts\Linkable;
 
-use function array_keys;
-use function collect;
-
-class Post extends Model implements HasMedia
+class Post extends Model
+    implements HasContentBlocks, HasHeroImageAttributes, HasIntroAttribute, HasMedia, HasMediaAttributes,
+               HasOverviewAttributes, HasPageAttributes, HasSEOAttributes, Linkable, HasCode, HasTranslatableMedia
 {
+    use HasAuthorAttributeTrait;
+    use HasDefaultContentBlocksTrait;
     use HasFactory;
-    use HasFlexible;
-    use HasTranslatableSlug;
-    use HasTranslations;
-    use InteractsWithMedia;
+    use HasTranslatedHeroImageAttributesTrait;
+    use HasTranslatedContentBlocksTrait;
+    use HasTranslatedIntroAttributeTrait;
+    use HasTranslatedOverviewAttributesTrait;
+    use HasTranslatedPageAttributesTrait;
+    use HasTranslatedSEOAttributesTrait;
+    use HasTranslatedSlugAttributeTrait;
+    use HasCodeTrait;
 
-    protected $connection = '';
-
-    public $translatable = [
-        'title',
-        'slug',
-        'meta_title',
-        'meta_description',
-    ];
-
-    public function casts(): array
+    public function getViewUrl(?string $locale = null): string
     {
-        return [
-            'title' => 'array',
-            'meta_description' => 'array',
-            'meta_title' => 'array',
-            'slug' => 'array',
-            'content' => 'array',
-            'post_type' => PageTypeEnum::class,
-        ];
+        //toggle the locale to make sure the slug gets translated:
+        $currentLocale = app()->getLocale();
+        $locale = $locale ?? $currentLocale;
+
+        return $this->translate('slug', $locale);
     }
 
-    public function getSlugOptions(): SlugOptions
+    public function getPreviewUrl(?string $locale = null): string
     {
-        return SlugOptions::createWithLocales(array_keys(LaravelLocalization::getSupportedLocales()))
-            ->generateSlugsFrom(function ($model, $locale) {
-                if ($model->post_type === PageTypeEnum::HOME) {
-                    return '/';
-                }
-
-                return $model->title;
-            })
-            ->doNotGenerateSlugsOnUpdate()
-            ->saveSlugsTo('slug');
-    }
-
-    /**
-     * Get the route key for the model.
-     *
-     * @return string
-     */
-    public function getRouteKeyName(): string
-    {
-        return 'slug';
+        return $this->getViewUrl($locale);
     }
 }
